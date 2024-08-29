@@ -1,0 +1,41 @@
+name: test
+run-name: test Actions
+on:
+  workflow_dispatch:
+  schedule:
+   - cron: '0 0 * * *'
+  pull_request:
+    branches:
+      - main
+jobs:
+  run-all-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3.1.4
+        with:
+          python-version: '3.8'
+      - run: pip install pytest  nicegui>=1.4.0 playwright pytest-playwright
+      - run: playwright install
+      - run: pytest __tests/
+  try-startup:
+    strategy:
+      matrix:
+        python: ["3.8", "3.11"]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install nicegui>=1.4.0
+      - run: python setup.py build
+      - run: cp actions_scripts/try_startup_script.py ./build/lib
+      - name: to build lib dir
+        working-directory: ./build/lib
+        run: |
+          ls
+          pwd
+          python try_startup_script.py
+    
