@@ -1,0 +1,2 @@
+2024-08-30 13:52:30: [info] Folder 'dzwieki' istnieje, ignoruje. 
+2024-08-30 13:52:32: [info] Folder 'dzwieki' istnieje, ignoruje. 
